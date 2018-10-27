@@ -1,10 +1,11 @@
-import {INCOME_TYPES_FETCHED} from '../actionTypes';
+import {INCOME_TYPES_FETCHED, CLEAR_INCOME_TYPES} from '../actionTypes';
 import {createSelector} from 'reselect';
 
 
 export default function income (state = { }, action = { }){
     switch(action.type){
         case INCOME_TYPES_FETCHED:
+        case CLEAR_INCOME_TYPES:
             return { ...state, ...action.data.entities.incomeTypes }
         default: return state;
     }

@@ -1,6 +1,7 @@
 import {USER_LOGGED_IN, USER_LOGGED_OUT} from '../actionTypes';
 import api from '../../services/api';
 import setAuthorizationHeader from '../../util/setAuthorizationHeader';
+import {clearIncomeTypes} from './income';
 
 export const userLoggedIn=(user)=>({
     type: USER_LOGGED_IN,
@@ -24,6 +25,7 @@ api.user.login(credentials).then(user=>{
 export const logout = () => dispatch =>{
     localStorage.removeItem('myappJWT');
     setAuthorizationHeader();
+    dispatch(clearIncomeTypes());
     dispatch(userLoggedOut());
 };
 
