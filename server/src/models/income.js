@@ -18,7 +18,7 @@ const userIncomeRecordSchema = new mongoose.Schema({
 
     fk_user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
 
-    fk_userItem: {type: mongoose.Schema.Types.ObjectId, ref: 'userItems'}
+    fk_Item: {type: mongoose.Schema.Types.ObjectId, ref: 'Items'}
 });
 
-export default mongoose.model('UIR', userIncomeRecordSchema);
+export default mongoose.model('Income', userIncomeRecordSchema);

@@ -1,7 +1,5 @@
 import express from 'express';
 import User from '../models/user';
-import Item from '../models/item';
-import userItem from '../models/userItem';
 import parseErrors from '../utils/parseErrors';
 import sendConfirmationEmail from '../utils/mailer';
 
@@ -14,16 +12,16 @@ router.post('/', (req, res)=>{
     const user = new User ({username, email});
 
     // junto al usuario se crean los items del usuario
-    Item.find({custom: false})
-    .then(items=>{
-        items.forEach( (element, index) => {
-            userItem.create({
-                fk_concept: items[index].fk_concept,
-                fk_user: user._id,
-                fk_item: items[index]
-            }).then(()=>{}).catch(err=>console.log(err));
-        });
-    });
+    // Item.find({custom: false})
+    // .then(items=>{
+    //     items.forEach( (element, index) => {
+    //         userItem.create({
+    //             fk_concept: items[index].fk_concept,
+    //             fk_user: user._id,
+    //             fk_item: items[index]
+    //         }).then(()=>{}).catch(err=>console.log(err));
+    //     });
+    // });
 
     user.setPassword(password);
     user.setConfirmationToken();

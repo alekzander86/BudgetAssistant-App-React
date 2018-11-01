@@ -17,6 +17,6 @@ export default{
     },
     income:{
         fetchTypes: ()=>
-        axios.get('/api/income/fetch_types').then(res=> res.data.incomeTypes),
+        axios.get('/api/income/fetch_types').then(res=> res.data.items),
     }
 }

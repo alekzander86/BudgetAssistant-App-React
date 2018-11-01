@@ -37,7 +37,7 @@ App.propTypes={
   location:PropTypes.shape({
         pathname: PropTypes.string.isRequired
     }).isRequired,
-  confirm: PropTypes.bool.isRequired,
+  confirm: PropTypes.bool,
 }
 
 function mapStateToProps(state){

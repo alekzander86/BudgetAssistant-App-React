@@ -16,10 +16,10 @@ const userExpenseRecordSchema = new mongoose.Schema({
 
     fk_user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
 
-    fk_userItem: {type: mongoose.Schema.Types.ObjectId, ref: 'userItems'}
+    fk_Item: {type: mongoose.Schema.Types.ObjectId, ref: 'Items'}
 });
 
 
-export default mongoose.model('UER', userExpenseRecordSchema);
+export default mongoose.model('Expense', userExpenseRecordSchema);
 
 

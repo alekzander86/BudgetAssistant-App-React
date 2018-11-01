@@ -6,8 +6,8 @@ import {fetchIncomeTypes} from '../../store/actions/income'
 
 class DashboardPage extends Component{
 
-    componentDidMount = () => this.onInit(this.props);
-    onInit = props => props.fetchIncomeTypes();
+     componentDidMount = () => this.onInit(this.props);
+     onInit = props => props.fetchIncomeTypes();
 
     render(){
         return(

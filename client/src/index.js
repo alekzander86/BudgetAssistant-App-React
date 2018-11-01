@@ -13,8 +13,11 @@ import rootReducer from './store/rootReducer';
 import { userLoggedIn } from './store/actions/auth';
 import setAuthorizationHeader from './util/setAuthorizationHeader';
 
-
-const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
+const loggerMiddleware = store => next => action =>{
+    console.log('dispatching', action);
+    next(action)
+}
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk,loggerMiddleware)));
 
 if(localStorage.myappJWT){
     const payload = decode(localStorage.myappJWT);
