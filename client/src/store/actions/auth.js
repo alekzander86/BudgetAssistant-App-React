@@ -3,6 +3,7 @@ import api from '../../services/api';
 import setAuthorizationHeader from '../../util/setAuthorizationHeader';
 import {clearIncomeTypes} from './income';
 
+
 export const userLoggedIn=(user)=>({
     type: USER_LOGGED_IN,
     user
@@ -19,6 +20,7 @@ api.user.login(credentials).then(user=>{
     localStorage.myappJWT = user.token;
     setAuthorizationHeader(user.token);
     dispatch(userLoggedIn(user))
+
 
 })
 
