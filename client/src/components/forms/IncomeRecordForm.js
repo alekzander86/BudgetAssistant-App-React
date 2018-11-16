@@ -4,7 +4,8 @@ import {connect} from 'react-redux';
 import Validator from 'validator';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
-import DateTimePicker from 'react-datetime-picker';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
+import 'react-day-picker/lib/style.css';
 
 
 // const options = [
@@ -25,7 +26,8 @@ class IncomeRecordForm extends Component {
         },
         errors:{},
         selectedOption: null,
-        selectDate: null
+        selectDate: null,
+        selectedDay: null
     } 
     
     handleSelectItem = (option) =>{
@@ -48,16 +50,15 @@ class IncomeRecordForm extends Component {
         this.setState({data: updateData});
     }
 
-    handleSelectDate = (date) =>{
-
-        this.setState({selectDate: date});
-        const updateDate = date;
+    handleDayChange = (day) =>{
+        //console.log(day.toLocaleString());
+        this.setState({selectedDay:day});
+        const updateDate = day.toLocaleString();
         const updateData = {
             ...this.state.data
         }
         updateData.date = updateDate;
         this.setState({data: updateData});
-
     }
        
     handleChange = e => this.setState({
@@ -99,7 +100,7 @@ class IncomeRecordForm extends Component {
             return { value: Type.item , label: Type.item }; 
         });
 
-        const { errors, selectedOption, selectDate} = this.state;
+        const { errors, selectedOption} = this.state;
         const {amount} = this.state.data;
        
         return(
@@ -142,7 +143,8 @@ class IncomeRecordForm extends Component {
                                         {errors.option &&<InlineErrors text={errors.option}/>}
 
                                         <div className="form-group">
-                                            <DateTimePicker value={selectDate} onChange={this.handleSelectDate}/>
+                                            {/* <DatePicker  value={selectDate} onChange={this.handleSelectDate}/> */}
+                                            <DayPickerInput onDayChange={this.handleDayChange} />
                                         </div>   
                                         {errors.date &&<InlineErrors text={errors.date}/>}    
                                         <button type="submit" className="btn btn-block btn-primary">Save</button>
