@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types'
-import {fetchIncomeTypes} from '../../store/actions/income';
+import {fetchIncomeTypes, registerIncome} from '../../store/actions/income';
 import IncomeRecordForm from '../forms/IncomeRecordForm';
 
 class IncomeRecordPage extends Component{
@@ -13,20 +13,24 @@ class IncomeRecordPage extends Component{
          
     }
 
-    handleSubmitIncome = (data) =>
-        console.log(data);
+    handleSubmit = (data) =>
+    //console.log(data);
+     this.props.registerIncome(data).then(()=>{
+         this.props.history.push("/income")
+     });
 
     render(){
 
         return(
-            <IncomeRecordForm submit={this.handleSubmitIncome}/>
+            <IncomeRecordForm submit={this.handleSubmit}/>
         );
     }
 }
 
   IncomeRecordPage.propTypes={
-        fetchIncomeTypes: PropTypes.func.isRequired
+        fetchIncomeTypes: PropTypes.func.isRequired,
+        registerIncome: PropTypes.func.isRequired
     
   }
 
-export default connect(null,{fetchIncomeTypes})(IncomeRecordPage);
+export default connect(null,{fetchIncomeTypes, registerIncome})(IncomeRecordPage);

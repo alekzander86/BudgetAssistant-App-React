@@ -1,12 +1,17 @@
 import React,{Component} from 'react';
 import InlineErrors from '../messages/InlineErrors';
+import SWW from '../messages/SWW';
 import {connect} from 'react-redux';
 import Validator from 'validator';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
-
+import MomentLocaleUtils, {
+    formatDate,
+    parseDate,
+  } from 'react-day-picker/moment';
+import 'moment/locale/it';
 
 // const options = [
 //     { value: 'chocolate', label: 'Chocolate' },
@@ -21,15 +26,27 @@ class IncomeRecordForm extends Component {
             amount: '0',
             description: '',
             date: null,
-            option: null,
+            fk_item: null,
             
         },
         errors:{},
         selectedOption: null,
-        selectDate: null,
         selectedDay: null
     } 
     
+    clearState(){
+        const update = {...this.state.data};
+        update.amount = '0';
+        update.description = '';
+        update.date = null;
+        update.fk_item = null;
+        
+        this.setState({data:update});
+
+        this.setState({selectedOption: null});
+        this.setState({selectedDay: Date.now});
+    }
+
     handleSelectItem = (option) =>{
     //    console.log(this.refs.itemSelector.value);
     //    const updateId = this.refs.itemSelector.value;
@@ -46,14 +63,14 @@ class IncomeRecordForm extends Component {
         const updateData ={
             ...this.state.data
         }
-        updateData.option = updateOption;
+        updateData.fk_item = updateOption;
         this.setState({data: updateData});
     }
 
     handleDayChange = (day) =>{
         //console.log(day.toLocaleString());
         this.setState({selectedDay:day});
-        const updateDate = day.toLocaleString();
+        const updateDate = day;
         const updateData = {
             ...this.state.data
         }
@@ -75,6 +92,13 @@ class IncomeRecordForm extends Component {
         if (Object.keys(errors).length === 0) {
             this.props
             .submit(this.state.data)
+            .catch(err =>
+                this.setState({errors: err.response.data.errors})
+            );
+
+
+            this.clearState();
+
              
         }
     }
@@ -83,7 +107,7 @@ class IncomeRecordForm extends Component {
         const errors ={};
         if(data.amount === '0') errors.amount = "Amount not defined"
         if(!Validator.isCurrency(data.amount)) errors.amount = 'The amount is not valid'
-        if(!data.option || data.option === null) errors.option = "Type of income not defined"
+        if(!data.fk_item || data.fk_item === null) errors.fk_item = "Type of income not defined"
         if(!data.date || data.date === null) errors.date = "Date not defined"
         return errors;
     };
@@ -97,11 +121,11 @@ class IncomeRecordForm extends Component {
 
         // para cada elemento, se crea un nuevo objeto con las nuevas propiedades.
         const options = this.props.Types.map(Type => { 
-            return { value: Type.item , label: Type.item }; 
+            return { value: Type._id , label: Type.item }; 
         });
 
-        const { errors, selectedOption} = this.state;
-        const {amount} = this.state.data;
+        const { errors, selectedOption, selectedDay} = this.state;
+        const {amount, description} = this.state.data;
        
         return(
 
@@ -114,7 +138,7 @@ class IncomeRecordForm extends Component {
                                     <h3 className="text-primary">Income record form</h3>
                                     <hr/>
                                 </div>
-                                
+                                    {errors.global &&<SWW text={errors.global}/>}
                                     <form onSubmit={this.handleSubmit}>
                                         <div className="form-group">
                                             <div className="input-group">
@@ -128,7 +152,7 @@ class IncomeRecordForm extends Component {
                                         <div className="form-group">
                                             <div className="input-group">
                                                 
-                                                <textarea onChange={this.handleChange} name="description" autoComplete="false" cols="30" rows="auto" className="form-control" placeholder="Optional description of your income"></textarea>
+                                                <textarea value={description} onChange={this.handleChange} name="description" autoComplete="false" cols="30" rows="auto" className="form-control" placeholder="Optional description of your income"></textarea>
                                             </div>
                                         </div>
 
@@ -140,11 +164,15 @@ class IncomeRecordForm extends Component {
                                         <div className="form-group">
                                             <Select name="id" value={selectedOption} onChange={this.handleSelectItem} options={options}/>
                                         </div>
-                                        {errors.option &&<InlineErrors text={errors.option}/>}
+                                        {errors.fk_item &&<InlineErrors text={errors.fk_item}/>}
 
                                         <div className="form-group">
                                             {/* <DatePicker  value={selectDate} onChange={this.handleSelectDate}/> */}
-                                            <DayPickerInput onDayChange={this.handleDayChange} />
+                                            <DayPickerInput 
+                                                value={selectedDay}
+                                                formatDate={formatDate}
+                                                parseDate={parseDate}
+                                                onDayChange={this.handleDayChange} />
                                         </div>   
                                         {errors.date &&<InlineErrors text={errors.date}/>}    
                                         <button type="submit" className="btn btn-block btn-primary">Save</button>

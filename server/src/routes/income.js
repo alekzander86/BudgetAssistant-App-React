@@ -2,8 +2,18 @@ import express from 'express';
 import authenticate from '../middlewares/authenticate';
 import Concept from '../models/concept';
 import Item from '../models/item';
+import Income from '../models/income';
+import parseErrors from '../utils/parseErrors';
 
 const router = express.Router();
+
+router.post('/register', authenticate, (req, res)=>{
+    Income.create({ ...req.body.income, fk_user: req.currentUser._id})
+    .then(income => res.json({income}))
+    .catch(err=>res.status(400).json({errors: parseErrors(err.errors)}));
+    
+});
+
 
 router.get('/fetch_types', authenticate, (req, res)=>{
     

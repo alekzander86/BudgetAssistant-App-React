@@ -18,5 +18,8 @@ export default{
     income:{
         fetchTypes: ()=>
         axios.get('/api/income/fetch_types').then(res=> res.data.items),
+        register: (income) =>
+        axios.post('/api/income/register',{income}).then(res=> res.data.income),
+        
     }
 }
